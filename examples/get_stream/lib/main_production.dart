@@ -12,6 +12,7 @@ import 'package:flutter/widgets.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get_stream/app/app.dart';
 import 'package:get_stream/app/app_bloc_observer.dart';
+import 'package:stream_feed/stream_feed.dart';
 
 void main() {
   Bloc.observer = AppBlocObserver();
@@ -20,7 +21,14 @@ void main() {
   };
 
   runZonedGuarded(
-    () => runApp(const App()),
+    () {
+      final feedClient = StreamFeedClient.connect(
+        AppConfig.key,
+        secret: AppConfig.secret,
+      );
+
+      runApp(App(feedClient: feedClient));
+    },
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
 }

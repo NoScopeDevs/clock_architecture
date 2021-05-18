@@ -7,12 +7,19 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_stream/app/app.dart';
+import 'package:get_stream/app/app_config.dart';
 import 'package:get_stream/counter/counter.dart';
+import 'package:stream_feed/stream_feed.dart';
 
 void main() {
   group('App', () {
+    final tFeedClient = StreamFeedClient.connect(
+      AppConfig.key,
+      secret: AppConfig.secret,
+    );
+
     testWidgets('renders CounterPage', (tester) async {
-      await tester.pumpWidget(const App());
+      await tester.pumpWidget(App(feedClient: tFeedClient));
       expect(find.byType(CounterPage), findsOneWidget);
     });
   });
